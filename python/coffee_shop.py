@@ -1,28 +1,25 @@
 # Instances of CoffeeFlavour will be the Flyweights
 class CoffeeFlavour:
 
-    def __init__(newFlavor):
-		self.name = newFlavor
+    def __init__(self, newFlavor):
+        self.name = newFlavor
 
 # Menu acts as a factory and cache for CoffeeFlavour flyweight objects
 class Menu:
 
     def __init__(self):
-        flavours = {}
+        self.flavours = {}
 
-    def lookup(self, flavorName):
-		if not flavours.containsKey(flavorName):
-			flavours.put(flavorName, CoffeeFlavour(flavorName))
-		return flavours.get(flavorName)
-
-    def totalCoffeeFlavoursMade(self):
-		return flavours.size()
+    def lookup(self, flavourName):
+        if flavourName not in self.flavours:
+            self.flavours[flavourName] = CoffeeFlavour(flavourName)
+        return self.flavours[flavourName]
 
 class Order:
 
     def __init__(self, tableNumber, flavor):
-		self.tableNumber = tableNumber
-		self.flavour = flavor
+        self.tableNumber = tableNumber
+        self.flavour = flavor
 
     def serve(self):
         pass
@@ -30,15 +27,15 @@ class Order:
 class CoffeeShop:
 
     def __init__(self):
-        orders = []
-        menu = Menu()
+        self.orders = []
+        self.menu = Menu()
 
     def takeOrder(self, flavourName, table):
-		flavour = menu.lookup(flavourName)
-		order = Order(table, flavour)
-		orders.add(order)
+        flavour = self.menu.lookup(flavourName)
+        order = Order(table, flavour)
+        self.orders.append(order)
 
     def service(self):
-        for order in orders:
-			order.serve()
+        for order in self.orders:
+            order.serve()
 
